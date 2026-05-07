@@ -2,18 +2,20 @@ import React from 'react'
 import { Outlet } from "react-router-dom";
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
-import Sidebar from '@/components/common/Sidebar'
+import Sidebar from '@/components/common/sidebar/Sidebar'
 
 const MainLayout = () => {
   return (
-    <div className='min-h-screen max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 grid-rows-[auto_1fr_auto] md:grid-cols-[200px_1fr] gap-4'>
+    <div className='min-h-screen flex flex-col'>
       <Header />
 
-      <Sidebar />
+       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-4 py-4">
+        <Sidebar />
 
-      <main className='border border-black p-2'>
-        <Outlet />
-      </main>
+        <main className="border border-black p-2 flex-1">
+          <Outlet />
+        </main>
+      </div>
       
      <Footer />
     </div>
