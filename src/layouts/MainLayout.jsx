@@ -12,7 +12,7 @@ const MainLayout = () => {
        <div className="mx-auto flex w-full max-w-7xl flex-1 gap-4 py-4">
         <Sidebar />
 
-        <main className="flex-1">
+        <main className="flex-1 min-w-0">
           <Outlet />
         </main>
       </div>

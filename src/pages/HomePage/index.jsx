@@ -2,7 +2,7 @@
 import AppButton from "@/components/common/AppButton"
 import QuestionList from "./components/QuestionList"
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div className='p-4'>
       <div className="flex justify-between items-center">
@@ -14,4 +14,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage

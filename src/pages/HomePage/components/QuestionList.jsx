@@ -1,6 +1,6 @@
 import {useQuestions, useQuestionsMock } from '@/hooks/questions'
 import QuestionCard from './QuestionCard'
-import QuestionCardSkeleton from './QuestionCardSkeleton'
+import QuestionCardSkeleton from '@/components/common/QuestionCardSkeleton'
 
 const QuestionList = () => {
     // const { data, isLoading } = useQuestions();
