@@ -8,6 +8,10 @@ import NotFound from '@/pages/NotFound'
 import ProtectedRoute from "./ProtectedRoute";
 import ProfilePage from "@/pages/ProfilePage";
 
+import AuthLayout from "@/layouts/AuthLayout";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from '@/pages/RegisterPage'
+
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
@@ -33,9 +37,23 @@ const router = createBrowserRouter([
           {
             path: "/profile",
             element: <ProfilePage />,
-          }
+          },
         ]
       },
+    ]
+  },
+
+  {
+    element: <AuthLayout />,
+    children: [
+        {
+          path: "/login",
+          element: <LoginPage />
+        },
+         {
+          path: "/register",
+          element: <RegisterPage />
+        }
     ]
   },
 
