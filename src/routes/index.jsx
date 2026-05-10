@@ -5,6 +5,8 @@ import HomePage from '@/pages/HomePage'
 import QuestionDetailPage from '@/pages/QuestionDetailPage'
 import AskQuestionPage from "@/pages/AskQuestionPage";
 import NotFound from '@/pages/NotFound'
+import ProtectedRoute from "./ProtectedRoute";
+import ProfilePage from "@/pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,16 @@ const router = createBrowserRouter([
       {
         path: "/questions/ask",
         element: <AskQuestionPage />,
+      },
+
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+          }
+        ]
       },
     ]
   },
