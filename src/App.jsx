@@ -2,10 +2,19 @@ import React from 'react'
 import { RouterProvider } from "react-router-dom";
 import router from '@/routes'
 import { Toaster } from '@/components/ui/sonner'
+import SplashScreen from './components/common/SplashScreen'; 
+import { useAuth } from './contexts/AuthContext';
 function App() {
-  return (
+
+  const { authLoading } = useAuth();
+ 
+  if(authLoading){
+    return <SplashScreen />;
+  }
+
+  return (    
     <>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
       
       <Toaster
         position="top-right"

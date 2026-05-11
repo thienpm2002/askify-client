@@ -2,7 +2,21 @@
 import AppButton from "@/components/common/AppButton"
 import QuestionList from "./components/QuestionList"
 import { Link } from 'react-router-dom'
+import { useCurrentUser } from "@/hooks/users/useCurrentUser"
+import { useAuth } from "@/contexts/AuthContext"
+import { useEffect } from "react"
 const HomePage = () => {
+
+  const { data: user } = useCurrentUser();
+
+  const { setUser } = useAuth();
+  
+  useEffect(() => {
+     if(user){
+      setUser(user);
+     }
+  }, [user, setUser])
+
   return (
     <div className='p-4'>
       <div className="flex justify-between items-center">

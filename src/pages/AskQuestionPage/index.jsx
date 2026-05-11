@@ -6,7 +6,7 @@ const AskQuestionPage = () => {
     <div className='p-4'>
       <div className="flex justify-between items-center">
           <BackButton />  
-          <h2 className="text-[18px] font-bold">Ask Question</h2>
+          <h2 className="text-[18px] lg:text-2xl font-bold">Ask Question</h2>
       </div> 
       <AskQuestionForm />
     </div>

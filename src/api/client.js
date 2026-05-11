@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { authApi } from '@/api/auth'
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -19,6 +20,7 @@ const processQueue = (error, token=null) => {
     failedQueue = [];
 }
 
+
 // ────────────────────── REQUEST INTERCEPTOR ──────────────────────
 client.interceptors.request.use(
   (config) => {
@@ -37,7 +39,7 @@ client.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if(error.response?.status === 401 && !originalRequest._retry) {
+        if(error.response?.status === 401 && !originalRequest._retry &&  !originalRequest.url.includes('/auth/refresh')) {
             if(isRefreshing) {
                return new Promise((resolve, reject) => {
                    failedQueue.push({ resolve, reject });
@@ -58,7 +60,13 @@ client.interceptors.response.use(
             } catch (refreshError) {
                 processQueue(refreshError, null);
                 setAccessToken(null);
-                window.location.href = '/login' 
+ 
+                if(refreshError?.response.status === 401){
+                    authApi.logout().catch(() => {});
+                }
+
+                window.location.href = "/";
+
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;
