@@ -8,10 +8,21 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLogout } from '@/hooks/auth/useLogout'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import {
+  LogOutIcon,
+  UserIcon,
+} from "lucide-react"
+
 const Header = () => {
   const [isOpenSearch, setIsOpenSearch] = useState(false)
   const { user, isAuthenticated } = useAuth();
-  const [isOpenLogOut, setIsOpenLogOut] = useState(false);
   const logOutMutation = useLogout();
 
   return (
@@ -34,17 +45,27 @@ const Header = () => {
               {
                 isAuthenticated ? 
                 <>
-                  <Avatar className='w-6 lg:w-8 h-6 lg:h-8 cursor-pointer relative' onClick={() => setIsOpenLogOut(prev => !prev)}>
-                   <AvatarImage src={user.avatarUrl ?  `${import.meta.env.VITE_API_URL}${user.avatarUrl}` : 'https://github.com/shadcn.png'} />
-                    <AvatarFallback>{user.userName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    {
-                      isOpenLogOut && (
-                        <div onClick={() => logOutMutation.mutate()} className='absolute right-0 top-7 lg:top-9 w-20 p-2 bg-chart-2 cursor-pointer text-white border border-chart-1 rounded-xs text-center'>
-                          Log out
-                        </div>
-                      )
-                    }
-                  </Avatar>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Avatar className='w-6 lg:w-8 h-6 lg:h-8 cursor-pointer relative'>
+                        <AvatarImage src={user.avatarUrl ?  `${import.meta.env.VITE_API_URL}${user.avatarUrl}` : 'https://github.com/shadcn.png'} />
+                        <AvatarFallback>{user.userName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem asChild>
+                         <Link to='/profile'>
+                            <UserIcon />
+                            Profile
+                          </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem variant="destructive" onClick={() => logOutMutation.mutate()}>
+                        <LogOutIcon />
+                        Log out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
                   <span className="text-indigo-600 hidden md:block">{user.userName}</span>
                 </>
                 :

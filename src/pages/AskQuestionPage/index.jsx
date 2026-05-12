@@ -1,13 +1,10 @@
-import BackButton from "@/components/common/BackButton"
+import PageHeader from '@/components/common/PageHeader'
 import AskQuestionForm from './AskQuestionForm'
 
 const AskQuestionPage = () => {
   return (
     <div className='p-4'>
-      <div className="flex justify-between items-center">
-          <BackButton />  
-          <h2 className="text-[18px] lg:text-2xl font-bold">Ask Question</h2>
-      </div> 
+      <PageHeader title='Ask Question'/>
       <AskQuestionForm />
     </div>
   )
