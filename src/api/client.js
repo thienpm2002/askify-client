@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { authApi } from '@/api/auth'
+import { refreshClient } from './refreshClient';
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -20,6 +21,14 @@ const processQueue = (error, token=null) => {
     failedQueue = [];
 }
 
+const excludedPaths = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/refresh',
+];
+
+
+
 
 // ────────────────────── REQUEST INTERCEPTOR ──────────────────────
 client.interceptors.request.use(
@@ -39,7 +48,11 @@ client.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if(error.response?.status === 401 && !originalRequest._retry &&  !originalRequest.url.includes('/auth/refresh')) {
+        const shouldSkipRefresh = excludedPaths.some(path =>
+          originalRequest.url.includes(path)
+        );
+
+        if(error.response?.status === 401 && !originalRequest._retry &&  !shouldSkipRefresh) {
             if(isRefreshing) {
                return new Promise((resolve, reject) => {
                    failedQueue.push({ resolve, reject });
@@ -52,7 +65,8 @@ client.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                const { accessToken: newToken } = await client.post('/auth/refresh');
+                const { data } = await refreshClient.post('/auth/refresh');
+                const newToken = data.accessToken;
                 setAccessToken(newToken);
                 processQueue(null, newToken);
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -61,7 +75,7 @@ client.interceptors.response.use(
                 processQueue(refreshError, null);
                 setAccessToken(null);
  
-                if(refreshError?.response.status === 401){
+                if(refreshError?.response?.status === 401){
                     authApi.logout().catch(() => {});
                 }
 

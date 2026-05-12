@@ -20,7 +20,10 @@ const RegisterPage = () => {
       .string()
       .min(2, 'Name must be at least 2 characters')
       .max(30, "Name must be at most 30 characters")
-      .trim(),
+      .trim()
+      .refine(d => d.includes('admin'), {
+        message: 'User name must not include admin'
+      }),
 
     email: z
       .string()

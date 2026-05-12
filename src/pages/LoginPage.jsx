@@ -27,7 +27,7 @@ const LoginPage = () => {
     
   })
 
-  const {register, handleSubmit, formState: {errors}} = useForm({
+  const {register, handleSubmit, setError, formState: {errors}} = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues:{
       email:'',
@@ -73,6 +73,8 @@ const LoginPage = () => {
           <Input id='password' type='password' className='h-10' {...register('password')}/>
           {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
         </div>
+
+        {errors.root && <p className="text-red-500 text-sm mt-2">{errors.root.message}</p>}
 
         <AppButton type='submit' disabled={registerMutation.isPending} className="text-[12px] font-normal px-2 py-4 md:text-[14px]">{registerMutation.isPending ? 'Loading...' : 'Login'}</AppButton>
       </form>

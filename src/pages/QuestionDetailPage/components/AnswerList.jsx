@@ -1,13 +1,13 @@
 
-import { useQuestionAnswersMock } from '@/hooks/questions/index'
+import { useQuestionAnswers } from '@/hooks/questions'
 import {MessageCircle} from 'lucide-react'
 import AnswerCard from './AnswerCard'
 
 const AnswerList = ({ question }) => {
 
-  const { data, isLoading }  = useQuestionAnswersMock(parseInt(question.id));
-
-  const answers = data?.answers ?? [];
+  const { data, isLoading }  = useQuestionAnswers(parseInt(question.id));
+  
+  const answers = data?.content ?? [];
 
   return (
     <div className='mt-4'>
@@ -18,7 +18,7 @@ const AnswerList = ({ question }) => {
           </span>
         </div>
         {
-            answers?.map(answer => <AnswerCard key={answer.id} {...answer} />)
+          isLoading ? <p>Loading...</p> : answers?.map(answer => <AnswerCard key={answer.id} {...answer} />)
         } 
     </div>
   )

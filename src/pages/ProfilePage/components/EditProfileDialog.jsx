@@ -34,8 +34,8 @@ const ACCEPTED_IMAGE_TYPES = [
 const EditProfileDialog = () => {
     const { user } = useAuth();
 
-    const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl);
-    const [avatarFile, setAvatarFile] = useState(user.avatarUrl);
+    const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl || 'https://github.com/shadcn.png');
+    const [avatarFile, setAvatarFile] = useState(null);
     const [avatarError, setAvatarError] = useState("");
 
     const [open, setOpen] = useState(false);
@@ -57,7 +57,9 @@ const EditProfileDialog = () => {
 
         setAvatarFile(file);
 
-        setAvatarPreview(URL.createObjectURL(file));
+        if(!user.avatarUrl){
+            setAvatarPreview(URL.createObjectURL(file));
+        }
     };
 
     const editProfileSchema = z.object({
@@ -65,7 +67,10 @@ const EditProfileDialog = () => {
         .string()
         .trim()
         .min(2, "Name must be at least 2 characters")
-        .max(30, "Name must be at most 30 characters"),
+        .max(30, "Name must be at most 30 characters")
+        .refine(d => !/admin/i.test(d), {
+            message: 'User name must not include admin'
+        }),
 
     email: z
         .string()
@@ -97,6 +102,10 @@ const EditProfileDialog = () => {
             }
 
             toast.success("Profile updated successfully");
+            
+            setAvatarFile(null);
+
+            setAvatarError('');
 
             setOpen(false);
 
@@ -119,7 +128,7 @@ const EditProfileDialog = () => {
                
                 <div className='flex flex-col justify-center items-center gap-4 border-b border-border pb-8 pt-2'>
                     <Avatar className='w-20 md:w-25 lg:w-30 h-20 md:h-25 lg:h-30'>
-                        <AvatarImage src={avatarPreview ?  `${import.meta.env.VITE_API_URL}${avatarPreview}` : 'https://github.com/shadcn.png'} />
+                        <AvatarImage src={user.avatarUrl ?  `${import.meta.env.VITE_API_URL}${user.avatarUrl}` : avatarPreview} />
                         <AvatarFallback>{user.userName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
 
@@ -157,7 +166,7 @@ const EditProfileDialog = () => {
                         </DialogClose>
                         <AppButton 
                             disabled={
-                                (!dirtyFields.email && !dirtyFields.userName) || 
+                                (!dirtyFields.email && !dirtyFields.userName && !avatarFile) || 
                                 updateProfileMutation.isPending || 
                                 updateAvatarMutation.isPending } 
                                 type='submit'

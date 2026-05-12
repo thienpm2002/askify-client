@@ -5,22 +5,29 @@ import  QuestionHeader from './components/QuestionHeader';
 import AnswerList from './components/AnswerList';
 import QuestionBody from './components/QuestionBody';
 import { useParams } from 'react-router-dom';
-import { useQuestionMock } from '@/hooks/questions';
+import { useQuestion } from '@/hooks/questions';
 import QuestionCardSkeleton from '@/components/common/QuestionCardSkeleton'
 import CreateAnswerForm from './components/CreateAnswerForm'
+import { Link } from 'react-router-dom';
 
 const QuestionDetailPage = () => {
-  const { id } = useParams();
+  const { id: questionId } = useParams();
 
-  const { data, isLoading } = useQuestionMock(parseInt(id));
+  const { data , isLoading } = useQuestion(parseInt(questionId));
 
-  const question = data?.question ?? [];
+  const question = data ?? [];
   
   return (
     <div className='p-4'>
       <div className="flex justify-between items-center">
           <BackButton />  
-          <AppButton className="text-[12px] font-normal px-3 py-5 md:text-[14px]">Ask Question</AppButton>
+          <AppButton className="text-[12px] font-normal px-3 py-5 md:text-[14px]">
+            <Link
+              to='/questions/ask'
+            >
+              Ask Question
+            </Link>
+          </AppButton>
       </div> 
       {
         isLoading ? 
@@ -29,7 +36,7 @@ const QuestionDetailPage = () => {
         )) 
         :
         <>
-          <QuestionHeader title={question.title} author={question.author} createdAt={question.createdAt}/>
+          <QuestionHeader questionId={question.id} title={question.title} author={question.author} createdAt={question.createdAt}/>
           <QuestionBody content={question.content} tags={question.tags} voteCount={question.voteCount}/> 
         </> 
       }

@@ -3,54 +3,59 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import AppButton from '@/components/common/AppButton'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { getAccessToken } from '@/api/client'
-import { useAskQuestion } from '@/hooks/questions'
-import { useNavigate } from "react-router-dom";
+import { useEditQuestion } from '@/hooks/questions'
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuestion } from '@/hooks/questions';
 
-const AskQuestionForm = () => {
-
- const [inputTag, setInputTag] = useState('');
+const EditQuestionForm = () => {
   
- const askQuestionSchema = z.object({
-    title: z
-      .string()
-      .trim()
-      .min(15, 'Title must be at least 15 characters'),
+    const { id } = useParams();
 
-    content: z
-      .string()
-      .trim()
-      .min(220, 'Content must be at least 220 characters'),
+    const questionId = parseInt(id);
 
-    tags: z
-      .array(z.string())
-      .min(1, 'Please add at least 1 tags')
-      .max(5, 'You can add up to 5 tags')
-  })
+    const [inputTag, setInputTag] = useState('');
 
+    const editQuestionSchema = z.object({
+        title: z
+        .string()
+        .trim()
+        .min(15, 'Title must be at least 15 characters'),
 
-  const {
-    register, 
-    handleSubmit, 
+        content: z
+        .string()
+        .trim()
+        .min(220, 'Content must be at least 220 characters'),
+
+        tags: z
+        .array(z.string())
+        .min(1, 'Please add at least 1 tags')
+        .max(5, 'You can add up to 5 tags')
+    })
+
+    const { data, isLoading } = useQuestion(questionId);
+
+    const {
+    register,
+    handleSubmit,
     setValue,
     watch,
     setError,
-    formState:{
-      errors, 
-    }} = useForm({
-      resolver: zodResolver(askQuestionSchema),
-      defaultValues: {
-        title: '',
-        content: '',
-        tags: []
-      }
-    })
+    reset,
+    formState: { errors, dirtyFields },
+    } = useForm({
+        resolver: zodResolver(editQuestionSchema),
+        defaultValues: {
+            title: '',
+            content: '',
+            tags: [],
+        },
+    });
 
   const tags = watch('tags');
 
@@ -59,36 +64,46 @@ const AskQuestionForm = () => {
         'tags',
         tags.filter((_, index) => index !== indexToRemove),
         {
-          shouldValidate: true
+          shouldValidate: true,
+          shouldDirty: true
         }
       );
-  }
+   }
 
-  const askQuestionMutation = useAskQuestion();
+   const editQuestionMutation = useEditQuestion();
 
-  const navigate = useNavigate();
+   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+    useEffect(() => {
+        if (data) {
+            reset({
+            title: data.title,
+            content: data.content,
+            tags: data.tags,
+            });
+        }
+    }, [data, reset]);
 
-    if(!getAccessToken()){
-      toast.warning('Please log in to continue');
-      return;
+    if (isLoading) {
+       return <div>Loading...</div>;
     }
 
+  const onSubmit = async (data) => {
+    
     try {
-      const question = await askQuestionMutation.mutateAsync(data);
+      await editQuestionMutation.mutateAsync(data);
 
-      toast.success('Ask question successful');
+      toast.success('Edit question successful');
 
-      navigate(`/questions/${question.id}`); 
+      navigate(`/questions/${questionId}`); 
     } catch (error) {
-      setError('root', {message: 'Ask question fail'})     
+      setError('root', {message: 'Edit question fail'})     
     }
 
   }
 
   return (
-    <form onSubmit={handleSubmit((data) => onSubmit(data))} className='border border-chart-1 p-5 mt-10 flex flex-col gap-8 rounded-2xl max-w-150 md:m-[40px_auto]'>
+    <form onSubmit={handleSubmit((data) => onSubmit({ questionId, data }))} className='border border-chart-1 p-5 mt-10 flex flex-col gap-8 rounded-2xl max-w-150 md:m-[40px_auto]'>
         <div>
           <Label htmlFor="title" className='mb-4'>Title</Label>
           <Input id='title' className='h-10' {...register('title')}/>
@@ -137,7 +152,8 @@ const AskQuestionForm = () => {
                   if(!tag || tags.includes(tag)) return;
 
                   setValue('tags', [...tags, tag], {
-                    shouldValidate: true
+                    shouldValidate: true,
+                    shouldDirty: true
                   });
 
                   setInputTag('');
@@ -150,9 +166,9 @@ const AskQuestionForm = () => {
         
         {errors.root && <p className="text-red-500 text-sm mt-2">{errors.root.message}</p>}
 
-        <AppButton disabled={askQuestionMutation.isPending} className="text-[12px] font-normal px-2 py-4 md:text-[14px]">{askQuestionMutation.isPending ? 'Đang gửi...' : 'Submit'}</AppButton>
+        <AppButton disabled={(!dirtyFields.content && !dirtyFields.tags && !dirtyFields.title) || editQuestionMutation.isPending} className="text-[12px] font-normal px-2 py-4 md:text-[14px]">{editQuestionMutation.isPending ? 'Đang gửi...' : 'Submit'}</AppButton>
     </form>
   )
 }
 
-export default AskQuestionForm
+export default EditQuestionForm

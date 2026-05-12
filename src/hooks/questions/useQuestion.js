@@ -4,7 +4,7 @@ import { questions } from '@/mocks/questions.mock'
 
 export const useQuestion = (id) => {
   return useQuery({
-    queryKey: ['questions', id],
+    queryKey: ['question', id],
     queryFn: () => questionsApi.getOne(id),
     enabled: !!id,
   })
