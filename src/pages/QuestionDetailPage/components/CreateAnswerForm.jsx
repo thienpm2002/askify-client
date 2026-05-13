@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { useAskAnswer } from "@/hooks/answers/useAskAnswer"
+import { useAskAnswer } from '@/hooks/answers';
 
 const CreateAnswerForm = ({ questionId }) => {
 

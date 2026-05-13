@@ -11,7 +11,7 @@ const QuestionList = () => {
         ))
     }
 
-    return data.content?.map(question => (
+    return data?.content?.map(question => (
         <QuestionCard
             key={question.id}
             {...question}

@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import MobileMenu from '@/components/common/sidebar/MobileMenu'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { useLogout } from '@/hooks/auth/useLogout'
+import { useLogout } from '@/hooks/auth'
 
 import {
   DropdownMenu,

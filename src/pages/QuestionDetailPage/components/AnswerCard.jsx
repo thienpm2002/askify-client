@@ -4,8 +4,7 @@ import ReactMarkdown from "react-markdown";
 import UserMeta from '@/components/common/UserMeta'
 import PostActions from '@/components/common/PostActions'
 import { useAuth } from '@/contexts/AuthContext';
-import { useEditAnswer } from '@/hooks/answers/useEditAnswer';
-import { useDeleteAnswer } from '@/hooks/answers/useDeleteAnswer';
+import { useEditAnswer, useDeleteAnswer } from '@/hooks/answers';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 

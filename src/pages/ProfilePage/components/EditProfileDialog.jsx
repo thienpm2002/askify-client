@@ -18,8 +18,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { useUpdateAvatar } from '@/hooks/users/useUpdateAvatar'
-import { useUpdateProfile } from '@/hooks/users/useUpdateProfile'
+import { useUpdateAvatar, useUpdateProfile } from '@/hooks/users'
+
 import { useAuth } from '@/contexts/AuthContext'
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
