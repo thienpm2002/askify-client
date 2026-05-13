@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { authApi } from '@/api/auth'
-import { refreshClient } from './refreshClient';
+import refreshClient from './refreshClient';
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

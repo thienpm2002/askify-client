@@ -4,28 +4,10 @@ import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 import UserMeta from '@/components/common/UserMeta'
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
+import PostActions from "@/components/common/PostActions"
 import { useAuth } from "@/contexts/AuthContext"
 import { useDeleteQuestion } from "@/hooks/questions"
+
 const QuestionCard = ({id, voteCount, answerCount, title, content, tags, author, createdAt }) => {
   
   const { user } = useAuth();
@@ -58,55 +40,7 @@ const QuestionCard = ({id, voteCount, answerCount, title, content, tags, author,
                 <div>
                    {isAuthor &&
                     <>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Ellipsis className="cursor-pointer"/>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem asChild className="cursor-pointer">
-                                <Link to={`/questions/${id}/edit`}>
-                                    <Pencil />
-                                    Edit
-                                </Link>
-                            </DropdownMenuItem>
-
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <DropdownMenuItem
-                                    className="text-red-500 cursor-pointer"
-                                    onSelect={(e) => e.preventDefault()}
-                                    >
-                                        <Trash2 />
-                                        Delete
-                                    </DropdownMenuItem>
-                                </AlertDialogTrigger>
-
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Are you absolutely sure?
-                                        </AlertDialogTitle>
-
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently
-                                            delete your question.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            Cancel
-                                        </AlertDialogCancel>
-
-                                        <AlertDialogAction onClick={handleDeleteQuestion}>
-                                            Delete
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                     <PostActions id={id} handlerDelete={handleDeleteQuestion} type='question'/>
                     </>
                    }
                 </div>

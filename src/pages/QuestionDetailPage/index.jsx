@@ -41,7 +41,7 @@ const QuestionDetailPage = () => {
         </> 
       }
       <AnswerList question={question}/>
-      <CreateAnswerForm />
+      <CreateAnswerForm questionId={question.id}/>
     </div>
   )
 }

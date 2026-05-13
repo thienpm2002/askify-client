@@ -1,26 +1,9 @@
 
 import UserMeta from '@/components/common/UserMeta'
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import PostActions from "@/components/common/PostActions"
 
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { toast } from 'sonner'
 
 import { useDeleteQuestion } from "@/hooks/questions"
@@ -53,55 +36,7 @@ const QuestionHeader = ({ questionId, title, author, createdAt }) => {
         </div>
 
         <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Ellipsis className="cursor-pointer"/>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                    <Link to={`/questions/${questionId}/edit`}>
-                        <Pencil />
-                        Edit
-                    </Link>
-                </DropdownMenuItem>
-
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <DropdownMenuItem
-                        className="text-red-500 cursor-pointer"
-                        onSelect={(e) => e.preventDefault()}
-                        >
-                            <Trash2 />
-                            Delete
-                        </DropdownMenuItem>
-                    </AlertDialogTrigger>
-
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>
-                                Are you absolutely sure?
-                            </AlertDialogTitle>
-
-                            <AlertDialogDescription>
-                                This action cannot be undone. This will permanently
-                                delete your question.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>
-                                Cancel
-                            </AlertDialogCancel>
-
-                            <AlertDialogAction onClick={handleDeleteQuestion}>
-                                Delete
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <PostActions id={questionId} handlerDelete={handleDeleteQuestion} type='question'/>
         </div>
     </div>
   )

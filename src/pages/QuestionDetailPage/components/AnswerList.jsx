@@ -18,7 +18,7 @@ const AnswerList = ({ question }) => {
           </span>
         </div>
         {
-          isLoading ? <p>Loading...</p> : answers?.map(answer => <AnswerCard key={answer.id} {...answer} />)
+          isLoading ? <p>Loading...</p> : answers?.map(answer => <AnswerCard key={answer.id} {...answer} questionId={question.id} />)
         } 
     </div>
   )
