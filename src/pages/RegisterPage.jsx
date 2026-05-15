@@ -21,7 +21,7 @@ const RegisterPage = () => {
       .min(2, 'Name must be at least 2 characters')
       .max(30, "Name must be at most 30 characters")
       .trim()
-      .refine(d => d.includes('admin'), {
+      .refine(d => !d.toLowerCase().includes('admin'), {
         message: 'User name must not include admin'
       }),
 

@@ -8,7 +8,7 @@ import PostActions from "@/components/common/PostActions"
 import { useAuth } from "@/contexts/AuthContext"
 import { useDeleteQuestion } from "@/hooks/questions"
 
-const QuestionCard = ({id, voteCount, answerCount, title, content, tags, author, createdAt }) => {
+const QuestionCard = ({id, voteCount, answerCount, title, content, tags, author, createdAt, acceptedAnswerId }) => {
   
   const { user } = useAuth();
   const isAuthor = (user?.id === author.id) || false;
@@ -27,7 +27,7 @@ const QuestionCard = ({id, voteCount, answerCount, title, content, tags, author,
   }
 
   return (
-    <Card className='mt-4 rounded-[8px] max-w-4xl'>
+    <Card className={`mt-4 rounded-[8px] max-w-4xl ${!!acceptedAnswerId ?'border border-green-300 bg-green-50/40' : ''}`}>
         <CardContent>
             {/* Stats */}
             <div className="flex justify-between">

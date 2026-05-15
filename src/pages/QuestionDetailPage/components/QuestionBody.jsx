@@ -2,10 +2,18 @@ import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/ui/badge"
 import VoteCount from '@/components/common/VoteCount'
 
-const QuestionBody = ({content, tags, voteCount}) => {
+const QuestionBody = ({id, content, tags, voteCount, author, currentUserVote}) => {
+
   return (
     <div className="flex gap-4 pb-6 border-b border-b-gray-200">
-        <VoteCount voteCount={voteCount}/>
+        <VoteCount 
+          key={`question-${id}`} 
+          voteCount={voteCount} 
+          authorId={author.id} 
+          targetId={id} 
+          targetType='QUESTION' 
+          currentUserVote={currentUserVote}
+        />
         
         <div className="flex-1 min-w-0">
             <div className="overflow-x-auto">

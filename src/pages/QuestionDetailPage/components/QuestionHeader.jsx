@@ -7,16 +7,21 @@ import { useNavigate } from "react-router-dom"
 import { toast } from 'sonner'
 
 import { useDeleteQuestion } from "@/hooks/questions"
+import { useAuth } from '@/contexts/AuthContext'
 
-const QuestionHeader = ({ questionId, title, author, createdAt }) => {
+const QuestionHeader = ({ id, title, author, createdAt }) => {
   
+  const {user} = useAuth();
+
+  const isAuthor = (user?.id === author.id) || false;
+
   const navigate = useNavigate();
 
   const deleteQuestionMutation = useDeleteQuestion();
   
   const handleDeleteQuestion = async () => {
         try {
-            await deleteQuestionMutation.mutateAsync(questionId);
+            await deleteQuestionMutation.mutateAsync(id);
             
             toast.success('Delete question successful');
 
@@ -36,7 +41,7 @@ const QuestionHeader = ({ questionId, title, author, createdAt }) => {
         </div>
 
         <div>
-          <PostActions id={questionId} handlerDelete={handleDeleteQuestion} type='question'/>
+          {isAuthor && <PostActions id={id} handlerDelete={handleDeleteQuestion} type='question'/>}
         </div>
     </div>
   )

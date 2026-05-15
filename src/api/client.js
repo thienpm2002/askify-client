@@ -33,6 +33,7 @@ const excludedPaths = [
 // ────────────────────── REQUEST INTERCEPTOR ──────────────────────
 client.interceptors.request.use(
   (config) => {
+    
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }

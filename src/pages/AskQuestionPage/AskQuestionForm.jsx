@@ -41,6 +41,7 @@ const AskQuestionForm = () => {
     setValue,
     watch,
     setError,
+    reset,
     formState:{
       errors, 
     }} = useForm({
@@ -77,6 +78,12 @@ const AskQuestionForm = () => {
 
     try {
       const question = await askQuestionMutation.mutateAsync(data);
+
+      reset({
+        title: '',
+        content: '',
+        tags: []
+      }); 
 
       toast.success('Ask question successful');
 

@@ -16,7 +16,7 @@ const QuestionDetailPage = () => {
   const { data , isLoading } = useQuestion(parseInt(questionId));
 
   const question = data ?? [];
-  
+ 
   return (
     <div className='p-4'>
       <div className="flex justify-between items-center">
@@ -36,8 +36,8 @@ const QuestionDetailPage = () => {
         )) 
         :
         <>
-          <QuestionHeader questionId={question.id} title={question.title} author={question.author} createdAt={question.createdAt}/>
-          <QuestionBody content={question.content} tags={question.tags} voteCount={question.voteCount}/> 
+          <QuestionHeader {...question}/>
+          <QuestionBody {...question}/> 
         </> 
       }
       <AnswerList question={question}/>

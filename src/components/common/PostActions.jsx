@@ -57,7 +57,7 @@ const PostActions = ({ handlerDelete, handlerEdit, id, type, content, editAnswer
   return (
      <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Ellipsis className="cursor-pointer"/>
+            <Ellipsis className='cursor-pointer'/>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
            {

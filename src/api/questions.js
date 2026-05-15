@@ -8,5 +8,6 @@ export const questionsApi = {
   deleteQuestion:  (id)     => client.delete(`/questions/${id}`),
   getAnswers: (id) => client.get(`/questions/${id}/answers`),
   searchQuestions: (query) => client.get(`/questions/search?keyword=${encodeURIComponent(query)}`),
+  acceptedAnswer: (questionId, answerId) => client.patch(`/questions/${questionId}/answers/${answerId}/accepted`),
 }
 

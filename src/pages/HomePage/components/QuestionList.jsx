@@ -4,7 +4,7 @@ import QuestionCardSkeleton from '@/components/common/QuestionCardSkeleton'
 
 const QuestionList = () => {
     const { data, isLoading } = useQuestions();
-    
+
     if (isLoading) {
         return [1,2,3].map(value => (
             <QuestionCardSkeleton key={value} />

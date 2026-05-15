@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useAskAnswer } from '@/hooks/answers';
+import { getAccessToken } from "@/api/client"
 
 const CreateAnswerForm = ({ questionId }) => {
 
@@ -17,7 +18,7 @@ const CreateAnswerForm = ({ questionId }) => {
         .min(30, 'Content must be at least 30 characters'),
   })
 
-  const {register, handleSubmit, setError, formState:{errors}} = useForm({
+  const {register, handleSubmit, setError, reset, formState:{errors}} = useForm({
     resolver: zodResolver(askAnswerSchema),
     defaultValues: {
       content: ''
@@ -27,8 +28,14 @@ const CreateAnswerForm = ({ questionId }) => {
   const askAnswerMutation = useAskAnswer();
 
   const onSubmit = async (data) => {
+    if(!getAccessToken()){
+          toast.warning('Please log in to continue');
+          return;
+    }
     try {
       await askAnswerMutation.mutateAsync(data);
+
+      reset({content: ''});
       
       toast.success('Ask answer successfuly');
     } catch (error) {
